@@ -60,6 +60,27 @@ public class AppOrderNegativeTest {
     }
 
     @Test
+    public void shouldBeFailedWithoutPhone() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иванов Петр");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        assertEquals("Поле обязательно для заполнения",
+                driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim());
+        assertTrue(driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).isDisplayed());
+    }
+
+    @Test
+    public void shouldBeFailedWithIncorrectPhone() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иванов Петр");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("910-14-67");
+        driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim());
+        assertTrue(driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).isDisplayed());
+    }
+
+    @Test
     public void shouldBeFailedUncheckedCheckbox() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иванов Петр");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79512345290");
